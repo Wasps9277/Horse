@@ -6,6 +6,8 @@ var fund;
 var bet;
 var pos;
 var enter;
+var laps;
+var count;
 //generates random number
 function drawRandom(max){
 	var random=Math.ceil(Math.random()*max);
@@ -48,6 +50,7 @@ function declareResult(){
 }
 //function to move the horse in upward direction
 function moveUp(){
+	
 	var element=document.getElementsByClassName('horse standRight');// gets the class name
 	var height=window.innerHeight;//calculates the height of the window and assigns it to the variable height
 	for(var i=0;i<element.length;i++){
@@ -68,10 +71,17 @@ function moveUp(){
 			var random=drawRandom(5);
 			element[i].style.left=right+random+'px';
 			if(right==initialPosition){
+				count++;
 				element[i].style.left+=random+'px';
-				element[i].className='horse standRight';
 				clearInterval(interval);
+				if(count==laps){	
 				declareResult();
+				clearInterval(interval);
+			}
+			else{
+				interval=setInterval(moveHorse,20);
+			}
+			
 			}
 	}},20);
 		}
@@ -117,7 +127,7 @@ function moveHorse(){
 		element[i].className='horse standRight runRight';
 		var random=drawRandom(5);
 		element[i].style.left=right+random+'px';
-		if(element[i].offsetLeft>(width*0.78)&&element[i].offsetLeft<(width*0.88)){
+		if(right>(width*0.78)&&right<(width*0.88)){
 			var randomNum=Math.floor(Math.random() * 3)+2;
 			element[i].style.left+=randomNum+'px';
 			clearInterval(interval);
@@ -129,6 +139,7 @@ function initiateInterval(){
 	var element=document.getElementsByClassName('horse standRight');
 	var start=document.getElementById('startline');
 	initialPosition=start.offsetLeft;
+	count=0;
 	interval=setInterval(moveHorse,20);
 }
 function check(){
@@ -141,6 +152,7 @@ function check(){
 		alert('Enter valid odds value');	
 }
 else{
+	laps=parseInt(prompt('Enter number of laps'));
 	initiateInterval();
 }
 }
