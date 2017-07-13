@@ -5,21 +5,31 @@ var amount;
 var fund;
 var bet;
 var pos;
+var enter;
+//generates random number
 function drawRandom(max){
 	var random=Math.ceil(Math.random()*max);
-	return random;
+	return random;//returns the generated random number
 }
 function gamble(){
-	fund=parseInt(document.getElementById('funds').innerHTML);
-	amount=document.getElementById('amount').value;
-	bet=document.getElementById('bethorse').value;
+	
+	var horse=[];
+	fund=parseInt(document.getElementById('funds').innerHTML);//gets the value of the funds and converts into the value to integer
+	amount=document.getElementById('amount').value;//gets the input value of the amount
+	bet=document.getElementById('bethorse').value;//gets the selected value of the bet horse
+	var element=document.getElementsByClassName('horse standRight');
+	/*for(var i=0;i<element.length;i++){
+		var odds=drawRandom(5);
+		horse[i+1]=odds;
+	}*/
 	if(bet===pos){
-		document.getElementById('funds').innerHTML=fund+parseInt(amount);
+		document.getElementById('funds').innerHTML=fund+(parseInt(amount)*enter);//if the bet horse wins the race the bet amount is added to the fund
 	}
 	else{
-		document.getElementById('funds').innerHTML=fund-amount;
+		document.getElementById('funds').innerHTML=fund-(amount*enter);//if the bet horse lose the race the bet amount is subtracted from the funds
 	}
 }
+//function to declare the final result of the race
 function declareResult(){
 	position=1;
 	var result=document.getElementsByClassName('horse standRight');
@@ -34,25 +44,27 @@ function declareResult(){
 	var wins=" wins";
 	alert(pos+wins);
 	gamble();
+
 }
+//function to move the horse in upward direction
 function moveUp(){
-	var element=document.getElementsByClassName('horse standRight');
-	var height=window.innerHeight;
+	var element=document.getElementsByClassName('horse standRight');// gets the class name
+	var height=window.innerHeight;//calculates the height of the window and assigns it to the variable height
 	for(var i=0;i<element.length;i++){
-		var up=element[i].offsetTop;
-		element[i].className='horse standRight runUp';
-		var random=drawRandom(5);
-		element[i].style.top=up-random+'px';
-		if(up>(height*0.008)&&up<(height*0.018)){
-			var randomNum=Math.floor(Math.random() * 5)+2;
+		var up=element[i].offsetTop;//calculates the position of the horse from the top of the window
+		element[i].className='horse standRight runUp';//adds the animation to the horse in the direction it is moving
+		var random=drawRandom(5);//calls the random generating function
+		element[i].style.top=up-random+'px';//allows the horse to move in upward direction
+		if(up>(height*0.008)&&up<(height*0.018)){//condition check for the turning of the horse
+			var randomNum=Math.floor(Math.random() * 5)+2;//generates random number between 2 and 5
 			element[i].style.top=up-randomNum+'px';
-			clearInterval(interval);
-			interval=setInterval(function(){
+			clearInterval(interval);//clears the previous set interval
+			interval=setInterval(function(){//sets the interval and passes the control to move the horse in east direction
 				var element=document.getElementsByClassName('horse standRight');
 		var width=window.innerWidth;
 		for(var i=0;i<element.length;i++){
-		 	right=element[i].offsetLeft;
-			element[i].className='horse standRight runRight';
+		 	right=element[i].offsetLeft;//gets the position of the horse from the left of the window
+			element[i].className='horse standRight runRight';//adds the animation to the horse in the direction it is moving
 			var random=drawRandom(5);
 			element[i].style.left=right+random+'px';
 			if(right==initialPosition){
@@ -124,7 +136,13 @@ function check(){
 	amount=document.getElementById('amount').value;
 	bet=document.getElementById('bethorse').value;
 	if(amount<=fund && amount!=0){
+	enter=parseInt(prompt('Enter the odds'));
+	if((enter*amount)>fund){
+		alert('Enter valid odds value');	
+}
+else{
 	initiateInterval();
+}
 }
 else{
 	alert('Please enter valid bet amount');
