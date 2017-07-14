@@ -8,6 +8,7 @@ var pos;
 var enter;
 var laps;
 var count;
+var clicked=false;
 //generates random number
 function drawRandom(max){
 	var random=Math.ceil(Math.random()*max);
@@ -30,6 +31,7 @@ function gamble(){
 	else{
 		document.getElementById('funds').innerHTML=fund-(amount*enter);//if the bet horse lose the race the bet amount is subtracted from the funds
 	}
+	clicked=false;
 }
 //function to declare the final result of the race
 function declareResult(){
@@ -108,7 +110,7 @@ function moveDown(){
 	var height=window.innerHeight;
 	for(var i=0;i<element.length;i++){
 		var down=element[i].offsetTop;
-		element[i].className='horse standRight runDown';
+		element[i].className='horse standRight character runDown';
 		var random=drawRandom(5);
 		element[i].style.top=down+random+'px';
 		if(down>(height*0.78)&&down<(height*0.88)){
@@ -136,6 +138,7 @@ function moveHorse(){
 	}
 }
 function initiateInterval(){
+	clicked=true;
 	var element=document.getElementsByClassName('horse standRight');
 	var start=document.getElementById('startline');
 	initialPosition=start.offsetLeft;
@@ -143,6 +146,7 @@ function initiateInterval(){
 	interval=setInterval(moveHorse,20);
 }
 function check(){
+	if(clicked==false){
 	fund=parseInt(document.getElementById('funds').innerHTML);
 	amount=document.getElementById('amount').value;
 	bet=document.getElementById('bethorse').value;
@@ -160,8 +164,11 @@ else{
 	alert('Please enter valid bet amount');
 }
 }
+}
 function callMain(){
+	
 	var element=document.getElementById('start');
 	element.addEventListener('click',check);
+
 }
 document.addEventListener('DOMContentLoaded',callMain);
